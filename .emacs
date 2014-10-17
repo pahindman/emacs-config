@@ -6,6 +6,8 @@
 ;; - minibufexplorer replacement -- probably not elscreen
 ;; - ctags integration
 
+(setq inhibit-startup-screen t)
+
 (package-initialize)
 (setq package-enable-at-startup nil)
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
@@ -102,6 +104,8 @@ return nil."
 (electric-indent-mode t)
 ; highlight the line that has point
 (global-hl-line-mode t)
+; disable toolbar buttons
+(tool-bar-mode 0)
 
 ; delete extra whitespace at the end of lines
 (add-hook 'before-save-hook 'delete-trailing-whitespace)
