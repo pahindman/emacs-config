@@ -1,0 +1,6 @@
+*
+!/.emacs
+!/.gitignore.d
+!/.gitignore.d/emacs-config
+!/README.md
+!/UNLICENSE
