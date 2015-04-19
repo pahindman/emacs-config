@@ -80,6 +80,9 @@ return nil."
 (define-key evil-motion-state-map (kbd "RET") nil)
 (define-key evil-motion-state-map " " nil)
 
+; Evil doesn't auto-indent in insert mode by default
+(define-key evil-insert-state-map (kbd "RET") 'evil-ret-and-indent)
+
 ; Make underscore part of a word
 (add-hook 'c++-mode-hook (lambda() (modify-syntax-entry ?_ "w" c++-mode-syntax-table)))
 (add-hook 'c-mode-hook (lambda() (modify-syntax-entry ?_ "w" c-mode-syntax-table)))
