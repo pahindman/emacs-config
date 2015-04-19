@@ -53,6 +53,7 @@ return nil."
 (try-install-package 'magit)
 (try-install-package 'p4)
 
+(setq ido-enable-flex-matching t)
 (require 'ido)
 (ido-mode t)
 
