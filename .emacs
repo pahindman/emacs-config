@@ -76,6 +76,10 @@ return nil."
 
 (setq make-backup-files nil)
 
+; Remove RET and space from motion state map (j and l work just fine)
+(define-key evil-motion-state-map (kbd "RET") nil)
+(define-key evil-motion-state-map " " nil)
+
 ; Make underscore part of a word
 (add-hook 'c++-mode-hook (lambda() (modify-syntax-entry ?_ "w" c++-mode-syntax-table)))
 (add-hook 'c-mode-hook (lambda() (modify-syntax-entry ?_ "w" c-mode-syntax-table)))
