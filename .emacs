@@ -76,6 +76,13 @@ return nil."
 
 (setq make-backup-files nil)
 
+; Make underscore part of a word
+(add-hook 'c++-mode-hook (lambda() (modify-syntax-entry ?_ "w" c++-mode-syntax-table)))
+(add-hook 'c-mode-hook (lambda() (modify-syntax-entry ?_ "w" c-mode-syntax-table)))
+(add-hook 'lisp-mode-hook (lambda() (modify-syntax-entry ?_ "w" lisp-mode-syntax-table)))
+(add-hook 'makefile-mode-hook (lambda() (modify-syntax-entry ?_ "w" makefile-mode-syntax-table)))
+(add-hook 'package-mode-hook (lambda() (modify-syntax-entry ?_ "w" package-mode-syntax-table)))
+
 ; enable showing (LINE, COLUMN) in the mode line
 (line-number-mode t)
 (column-number-mode t)
