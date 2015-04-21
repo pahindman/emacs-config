@@ -134,6 +134,10 @@ return nil."
                               (awk-mode . "awk")
                               (other . "ni-ss")))))
 
+(req-package rainbow-delimiters
+   :config
+   (add-hook 'prog-mode-hook 'rainbow-delimiters-mode))
+
 ;; slime configuration
 (add-to-list 'load-path "~/macports/share/emacs/site-lisp/slime")
 (when (require 'slime-autoloads nil t)
