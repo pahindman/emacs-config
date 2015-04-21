@@ -22,47 +22,55 @@ return nil."
       (with-demoted-errors (package-install package)))
    (require package nil t))
 
-(when (try-install-package 'evil-leader)
-  (global-evil-leader-mode))
+(try-install-package 'req-package)
 
-(when (try-install-package 'evil)
-  (evil-mode 1)
-  (setq-default evil-shift-width 3))
+(req-package evil-surround
+   :require evil
+   :config (global-evil-surround-mode 1))
 
-(when (try-install-package 'lua-mode)
-   (autoload 'lua-mode "lua-mode" "Lua editing mode." t)
-   (add-to-list 'auto-mode-alist '("\\.lua$" . lua-mode))
-   (add-to-list 'interpreter-mode-alist '("lua" . lua-mode)))
+(req-package evil-leader
+   :require evil
+   :config (global-evil-leader-mode 1))
 
-(when (try-install-package 'color-theme)
-   (color-theme-initialize))
+(req-package evil
+   :require undo-tree
+   :config
+   (progn
+      (evil-mode 1)
+      (setq-default evil-shift-width 3)
+      ; Remove RET and space from motion state map (j and l work just fine)
+      (unbind-key "RET" evil-motion-state-map)
+      (unbind-key " " evil-motion-state-map)
+      ; Evil doesn't auto-indent in insert mode by default
+      (bind-key "RET" 'evil-ret-and-indent evil-insert-state-map)))
 
-(when (try-install-package 'color-theme-solarized)
-   (color-theme-solarized-dark))
+(req-package lua-mode
+   :mode "\\.lua$"
+   :interpreter "lua")
 
-(when (try-install-package 'company)
-  (add-hook 'after-init-hook 'global-company-mode)
-  (require 'color)
-  (let ((bg (face-attribute 'default :background)))
-    (custom-set-faces
-      `(company-tooltip           ((t (:inherit default :background ,(color-lighten-name bg 8)))))
-      `(company-scrollbar-bg      ((t (                 :background ,(color-lighten-name bg 22)))))
-      `(company-scrollbar-fg      ((t (                 :background ,(color-lighten-name bg 15)))))
-      `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
-      `(company-tooltip-common    ((t (:inherit font-lock-constant-face)))))))
+(req-package company
+   :config (add-hook 'after-init-hook 'global-company-mode))
 
-(try-install-package 'rainbow-mode)
-(try-install-package 'magit)
-(try-install-package 'p4)
+(req-package color-theme
+   :config (color-theme-initialize))
 
-(setq ido-enable-flex-matching t)
-(require 'ido)
-(ido-mode t)
+(req-package color-theme-solarized
+   :config (color-theme-solarized-dark))
+
+(req-package rainbow-mode)
+(req-package magit)
+(req-package p4)
+
+(req-package ido
+  :init
+  (setq ido-enable-flex-matching t)
+  :config
+  (ido-mode t))
 
 ; when multiple buffers with the same name are loaded, use the parent
 ; directory names to uniquify the names
-(require 'uniquify)
-(setq uniquify-buffer-name-style 'forward)
+(req-package uniquify
+  :config (setq uniquify-buffer-name-style 'forward))
 
 ; don't use tabs for indenting
 (setq-default indent-tabs-mode nil)
@@ -77,13 +85,6 @@ return nil."
 (setq frame-title-format "%b")
 
 (setq make-backup-files nil)
-
-; Remove RET and space from motion state map (j and l work just fine)
-(define-key evil-motion-state-map (kbd "RET") nil)
-(define-key evil-motion-state-map " " nil)
-
-; Evil doesn't auto-indent in insert mode by default
-(define-key evil-insert-state-map (kbd "RET") 'evil-ret-and-indent)
 
 ; Make underscore part of a word
 (add-hook 'c++-mode-hook (lambda() (modify-syntax-entry ?_ "w" c++-mode-syntax-table)))
@@ -125,11 +126,13 @@ return nil."
       ;(arglist-close       . c-lineup-arglist)))
   "The base style for ni-emacs.  Based on Systems Software standards.")
 
-(require 'cc-mode)
-(c-add-style "ni-ss" ni-ss-style)
-(setq c-default-style '((java-mode . "java")
-                        (awk-mode . "awk")
-                        (other . "ni-ss")))
+(req-package cc-mode
+   :config
+   (progn
+      (c-add-style "ni-ss" ni-ss-style)
+      (setq c-default-style '((java-mode . "java")
+                              (awk-mode . "awk")
+                              (other . "ni-ss")))))
 
 ;; slime configuration
 (add-to-list 'load-path "~/macports/share/emacs/site-lisp/slime")
@@ -137,6 +140,8 @@ return nil."
    (setq slime-lisp-implementations
          `((clisp ("~/macports/bin/clisp"))))
    (slime-setup  '(slime-repl slime-asdf slime-fancy slime-banner)))
+
+(req-package-finish)
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
