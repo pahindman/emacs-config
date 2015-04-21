@@ -17,6 +17,8 @@ If the package is already installed, then simply 'require' it.
 Return t if installing and requiring the package succeeds, otherwise
 return nil."
    (unless (package-installed-p package)
+      (unless (assoc package package-archive-contents)
+         (package-refresh-contents))
       (with-demoted-errors (package-install package)))
    (require package nil t))
 
