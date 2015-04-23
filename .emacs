@@ -60,7 +60,9 @@ return nil."
    :config (color-theme-solarized-dark))
 
 (req-package rainbow-mode)
-(req-package magit)
+(req-package magit
+   :init
+   (setq magit-last-seen-setup-instructions "1.4.0"))
 (req-package p4)
 
 (req-package ido
